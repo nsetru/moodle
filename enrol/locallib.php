@@ -894,7 +894,8 @@ class course_enrolment_manager {
             $args['search'] = $this->searchfilter;
         }
         if (!empty($this->groupfilter)) {
-            $args['group'] = $this->groupfilter;
+            //#MDL-48073 Group filter is reset when moving to next page of enrolled users
+            $args['filtergroup'] = $this->groupfilter;
         }
         if ($this->statusfilter !== -1) {
             $args['status'] = $this->statusfilter;

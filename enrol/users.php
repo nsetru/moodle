@@ -205,7 +205,8 @@ if (!has_capability('moodle/course:viewhiddenuserfields', $context)) {
 
 $filterform = new enrol_users_filter_form('users.php', array('manager' => $manager, 'id' => $id),
         'get', '', array('id' => 'filterform'));
-$filterform->set_data(array('search' => $search, 'ifilter' => $filter, 'role' => $role));
+//#MDL-48073 Group filter is reset when moving to next page of enrolled users
+$filterform->set_data(array('search' => $search, 'ifilter' => $filter, 'role' => $role, 'filtergroup' => $fgroup));
 
 $table->set_fields($fields, $renderer);
 
