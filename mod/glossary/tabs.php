@@ -33,9 +33,13 @@
                                  $CFG->wwwroot.'/mod/glossary/view.php?id='.$id.'&amp;mode=date',
                                  get_string('dateview', 'glossary'));
 
-    $browserow[] = new tabobject(GLOSSARY_AUTHOR_VIEW,
-                                 $CFG->wwwroot.'/mod/glossary/view.php?id='.$id.'&amp;mode=author',
-                                 get_string('authorview', 'glossary'));
+    // MDL-26501 Glossary: 'Without author' option does not work in all places
+    // Hide 'GLOSSARY_AUTHOR_VIEW' tab, if $glossary is set to 'fullwithoutauthor' format
+    if($glossary->approvaldisplayformat != 'fullwithoutauthor') {
+        $browserow[] = new tabobject(GLOSSARY_AUTHOR_VIEW,
+                                     $CFG->wwwroot.'/mod/glossary/view.php?id='.$id.'&amp;mode=author',
+                                     get_string('authorview', 'glossary'));
+    }
 
     if ($tab < GLOSSARY_STANDARD_VIEW || $tab > GLOSSARY_AUTHOR_VIEW) {   // We are on second row
         $inactive = array('edit');
