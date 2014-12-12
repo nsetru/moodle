@@ -131,13 +131,7 @@ foreach($feeds as $feed) {
 $table->print_html();
 
 $url = $CFG->wwwroot . '/blocks/rss_client/editfeed.php?' . substr($extraparams, 1);
-//-- niv hack
-$parenturl = new moodle_url('/course/view.php', array('id' => $courseid, 'sesskey'=>sesskey(), 'bui_editid' => 25));
-//echo '<div class="actionbuttons">' . $OUTPUT->single_button($url, get_string('addnewfeed', 'block_rss_client'), 'get') . '</div>';
-echo '<div class="actionbuttons">' . $OUTPUT->single_button($url, get_string('addnewfeed', 'block_rss_client'), 'get') .
-    $OUTPUT->single_button($parenturl, get_string('cancel'));
-    '</div>';
-//-- niv hack
+echo '<div class="actionbuttons">' . $OUTPUT->single_button($url, get_string('addnewfeed', 'block_rss_client'), 'get') . '</div>';
 
 
 if ($returnurl) {
