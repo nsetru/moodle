@@ -49,7 +49,10 @@
     }
 
     function get_content() {
-        global $CFG, $DB;
+        //--niv
+        //global $CFG, $DB;
+        global $CFG, $DB, $PAGE;
+        //--niv
 
         if ($this->content !== NULL) {
             return $this->content;
@@ -90,6 +93,13 @@
 
         $output = '';
 
+        //--niv
+        if($PAGE->user_is_editing()){
+            $output .= '<div class="newlink"> <a href="' . $CFG->wwwroot . '/blocks/rss_client/managefeeds.php?courseid=' . $this->page->course->id . '">' .
+                    get_string('feedsaddedit', 'block_rss_client') . '</a> </div>';
+            $output .= '<br />';
+        }
+        //--niv
 
         if (!empty($this->config->rssid)) {
             list($rss_ids_sql, $params) = $DB->get_in_or_equal($this->config->rssid);
@@ -175,7 +185,6 @@
         if($showtitle){
             $r.='<div class="title">'.$feedtitle.'</div>';
         }
-
 
         $r.='<ul class="list no-overflow">'."\n";
 
