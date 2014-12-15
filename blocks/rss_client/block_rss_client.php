@@ -49,10 +49,7 @@
     }
 
     function get_content() {
-        //--niv
-        //global $CFG, $DB;
         global $CFG, $DB, $PAGE;
-        //--niv
 
         if ($this->content !== NULL) {
             return $this->content;
@@ -67,12 +64,17 @@
             return $this->content;
         }
 
+        if($PAGE->user_is_editing()){
+            $this->content->text .= '<div class="newlink"> <a href="' . $CFG->wwwroot . '/blocks/rss_client/managefeeds.php?courseid=' . $this->page->course->id . '">' .
+                get_string('feedsaddedit', 'block_rss_client') . '</a> </div> <br />';
+        }
+
         if (!isset($this->config)) {
             // The block has yet to be configured - just display configure message in
             // the block if user has permission to configure it
 
             if (has_capability('block/rss_client:manageanyfeeds', $this->context)) {
-                $this->content->text = get_string('feedsconfigurenewinstance2', 'block_rss_client');
+                $this->content->text .= get_string('feedsconfigurenewinstance2', 'block_rss_client');
             }
 
             return $this->content;
@@ -93,14 +95,6 @@
 
         $output = '';
 
-        //--niv
-        if($PAGE->user_is_editing()){
-            $output .= '<div class="newlink"> <a href="' . $CFG->wwwroot . '/blocks/rss_client/managefeeds.php?courseid=' . $this->page->course->id . '">' .
-                    get_string('feedsaddedit', 'block_rss_client') . '</a> </div>';
-            $output .= '<br />';
-        }
-        //--niv
-
         if (!empty($this->config->rssid)) {
             list($rss_ids_sql, $params) = $DB->get_in_or_equal($this->config->rssid);
 
@@ -117,7 +111,7 @@
             }
         }
 
-        $this->content->text = $output;
+        $this->content->text .= $output;
 
         return $this->content;
     }
