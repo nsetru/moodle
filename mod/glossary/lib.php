@@ -3135,3 +3135,20 @@ function glossary_page_type_list($pagetype, $parentcontext, $currentcontext) {
         'mod-glossary-edit'=>get_string('page-mod-glossary-edit', 'glossary'));
     return $module_pagetype;
 }
+
+/**
+ * Returns list of available tabs
+ * @return array
+ */
+function glossary_get_available_tabs() {
+    global $CFG; // required for the include
+
+    require_once(dirname(__FILE__).'/locallib.php');
+
+    return array (
+        GLOSSARY_STANDARD   => get_string('standardview', 'glossary'),
+        GLOSSARY_AUTHOR      => get_string('authorview', 'glossary'),
+        GLOSSARY_CATEGORY    => get_string('categoryview', 'glossary'),
+        GLOSSARY_DATE   => get_string('dateview', 'glossary')
+    );
+}

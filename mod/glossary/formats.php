@@ -248,6 +248,37 @@ echo '<table width="90%" align="center" class="generalbox">';
     <?php print_string("cnfshowgroup", "glossary") ?><br /><br />
     </td>
 </tr>
+<!-- niv MDL-26501 -->
+    <tr valign="top">
+        <!--<td align="right" width="20%"><label for="showgroup"><?php //print_string("includegroupbreaks", "glossary"); ?>:</label></td>-->
+        <td align="right" width="20%"><label for="visibletabs">Visible tabs</label></td>
+        <td>
+            <?php
+            $visibletabs = glossary_get_available_tabs();
+            $size = min(5, count($visibletabs));
+            ?>
+            <select size="1" id="visibletabs" name="visibletabs[]" size="<?php $size ?>" multiple="multiple">
+                <?php
+                /*$yselected = "";
+                $nselected = "";
+                if ($displayformat->showgroup) {
+                    $yselected = " selected=\"selected\" ";
+                } else {
+                    $nselected = " selected=\"selected\" ";
+                }*/
+                foreach ($visibletabs as $key => $value){?>
+                    <!--<option value=""></option>-->
+                <?php } ?>
+                <!--<option value="1" <?php //echo $yselected ?>><?php //p($yes)?></option>
+                <option value="0" <?php //echo $nselected ?>><?php //p($no)?></option>-->
+            </select>
+        </td>
+        <td width="60%">
+            <?php print_string("cnfshowgroup", "glossary") ?><br /><br />
+        </td>
+    </tr>
+<!-- niv MDL-26501 -->
+
 <tr>
     <td colspan="3" align="center">
     <input type="submit" value="<?php print_string("savechanges") ?>" /></td>
