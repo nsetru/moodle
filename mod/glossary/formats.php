@@ -255,9 +255,9 @@ echo '<table width="90%" align="center" class="generalbox">';
         <td>
             <?php
             $visibletabs = glossary_get_available_tabs();
-            $size = min(5, count($visibletabs));
+            $size = min(10, count($visibletabs));
             ?>
-            <select size="1" id="visibletabs" name="visibletabs[]" size="<?php $size ?>" multiple="multiple">
+            <select id="visibletabs" name="visibletabs[]" size="<?php $size ?>" multiple="multiple">
                 <?php
                 /*$yselected = "";
                 $nselected = "";
@@ -267,10 +267,9 @@ echo '<table width="90%" align="center" class="generalbox">';
                     $nselected = " selected=\"selected\" ";
                 }*/
                 foreach ($visibletabs as $key => $value){?>
-                    <!--<option value=""></option>-->
+                    <option value="<?php echo $key ?>" selected="selected"><?php echo $value ?></option>
+                    <!--<option value="0" selected="selected">Browse by author</option>-->
                 <?php } ?>
-                <!--<option value="1" <?php //echo $yselected ?>><?php //p($yes)?></option>
-                <option value="0" <?php //echo $nselected ?>><?php //p($no)?></option>-->
             </select>
         </td>
         <td width="60%">
