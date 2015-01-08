@@ -254,7 +254,8 @@ echo '<table width="90%" align="center" class="generalbox">';
         <td align="right" width="20%"><label for="visibletabs">Visible tabs</label></td>
         <td>
             <?php
-            $visibletabs = glossary_get_available_tabs();
+            $visibletabs = glossary_get_all_tabs();
+            $availabletabs = glossary_get_available_tabs($id);
             $size = min(10, count($visibletabs));
             ?>
             <select id="visibletabs" name="visibletabs[]" size="<?php $size ?>" multiple="multiple">

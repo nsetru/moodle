@@ -3137,10 +3137,10 @@ function glossary_page_type_list($pagetype, $parentcontext, $currentcontext) {
 }
 
 /**
- * Returns list of available tabs
+ * Returns list of tabs
  * @return array
  */
-function glossary_get_available_tabs() {
+function glossary_get_all_tabs() {
     global $CFG; // required for the include
 
     require_once(dirname(__FILE__).'/locallib.php');
@@ -3151,4 +3151,47 @@ function glossary_get_available_tabs() {
         GLOSSARY_CATEGORY    => get_string('categoryview', 'glossary'),
         GLOSSARY_DATE   => get_string('dateview', 'glossary')
     );
+}
+
+
+function glossary_get_available_tabs($formatid){
+    global $DB;
+
+    // Get list of all tabs
+    // Check list of visible tabs for particular format
+    // If no entries found within mdl_glossary_format_tabs table. Insert some default values for continuous, dictionary, fullwithoutauthor formats
+    if(!$visibletabs = $DB->get_record('glossary_formats_tabs', array('formatid' => $formatid))){
+
+        $formattab = new stdClass();
+        $formattab->formatid = $formatid;
+
+        $glossaryformat = $DB->get_field('glossary_formats', 'name', array('id' => $formatid));
+        switch($glossaryformat){
+            case continuous:
+                $formattab->standard = 1;
+                $formattab->author = 0;
+                $formattab->category = 1;
+                $formattab->date = 1;
+                break;
+            case dictionary:
+                $formattab->standard = 1;
+                $formattab->author = 0;
+                $formattab->category = 0;
+                $formattab->date = 0;
+                break;
+            case fullwithoutauthor:
+                $formattab->standard = 1;
+                $formattab->author = 0;
+                $formattab->category = 1;
+                $formattab->date = 1;
+                break;
+            default:
+                $formattab->standard = 1;
+                $formattab->author = 1;
+                $formattab->category = 1;
+                $formattab->date = 1;
+                break;
+        }
+    }
+
 }
