@@ -43,6 +43,20 @@ if ( $mode == 'visible' and confirm_sesskey()) {
     $displayformat->sortorder   = $form->sortorder;
 
     $DB->update_record("glossary_formats",$displayformat);
+
+    //-- niv
+    //$formattabs = $DB->get_record('glossary_formats_tabs', array('formatid' => $id));
+    $updatetab = new stdClass();
+    $alltabs = glossary_get_all_tabs();
+    foreach($alltabs as $key=>$value){
+        if(in_array($key, $form->visibletabs)){
+            $updatetab->$key = 1;
+        }else{
+            $updatetab->$key = 0;
+        }
+    }
+    $DB->update_record('glossary_formats_tabs', $updatetab);
+    //-- niv
     redirect("$CFG->wwwroot/$CFG->admin/settings.php?section=modsettingglossary#glossary_formats_header");
     die;
 }
@@ -250,31 +264,32 @@ echo '<table width="90%" align="center" class="generalbox">';
 </tr>
 <!-- niv MDL-26501 -->
     <tr valign="top">
-        <!--<td align="right" width="20%"><label for="showgroup"><?php //print_string("includegroupbreaks", "glossary"); ?>:</label></td>-->
         <td align="right" width="20%"><label for="visibletabs">Visible tabs</label></td>
         <td>
             <?php
-            $visibletabs = glossary_get_all_tabs();
+            $glossarytabs = glossary_get_all_tabs();
             $availabletabs = glossary_get_available_tabs($id);
             $size = min(10, count($visibletabs));
             ?>
             <select id="visibletabs" name="visibletabs[]" size="<?php $size ?>" multiple="multiple">
                 <?php
-                /*$yselected = "";
-                $nselected = "";
-                if ($displayformat->showgroup) {
-                    $yselected = " selected=\"selected\" ";
-                } else {
-                    $nselected = " selected=\"selected\" ";
-                }*/
-                foreach ($visibletabs as $key => $value){?>
-                    <option value="<?php echo $key ?>" selected="selected"><?php echo $value ?></option>
-                    <!--<option value="0" selected="selected">Browse by author</option>-->
-                <?php } ?>
+                $selected = "";
+                foreach ($glossarytabs as $key => $value) {
+                    if ($availabletabs->$key == 1) {
+                        ?>
+                        <option value="<?php echo $key ?>" selected="selected"><?php echo $value ?></option>
+                    <?php
+                    } else {
+                        ?>
+                        <option value="<?php echo $key ?>"><?php echo $value ?></option>
+                    <?php
+                    }
+                }
+                ?>
             </select>
         </td>
         <td width="60%">
-            <?php print_string("cnfshowgroup", "glossary") ?><br /><br />
+            <?php print_string("cnfshowgroup", "glossary") ?><br/><br/>
         </td>
     </tr>
 <!-- niv MDL-26501 -->

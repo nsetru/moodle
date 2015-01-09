@@ -3146,10 +3146,10 @@ function glossary_get_all_tabs() {
     require_once(dirname(__FILE__).'/locallib.php');
 
     return array (
-        GLOSSARY_STANDARD   => get_string('standardview', 'glossary'),
-        GLOSSARY_AUTHOR      => get_string('authorview', 'glossary'),
-        GLOSSARY_CATEGORY    => get_string('categoryview', 'glossary'),
-        GLOSSARY_DATE   => get_string('dateview', 'glossary')
+        standard   => get_string('standardview', 'glossary'),
+        author      => get_string('authorview', 'glossary'),
+        category    => get_string('categoryview', 'glossary'),
+        date   => get_string('dateview', 'glossary')
     );
 }
 
@@ -3164,34 +3164,35 @@ function glossary_get_available_tabs($formatid){
 
         $formattab = new stdClass();
         $formattab->formatid = $formatid;
+        $formattab->standard = 1;
+        $formattab->author = 1;
+        $formattab->category = 1;
+        $formattab->date = 1;
 
         $glossaryformat = $DB->get_field('glossary_formats', 'name', array('id' => $formatid));
         switch($glossaryformat){
             case continuous:
-                $formattab->standard = 1;
                 $formattab->author = 0;
-                $formattab->category = 1;
-                $formattab->date = 1;
                 break;
             case dictionary:
-                $formattab->standard = 1;
                 $formattab->author = 0;
                 $formattab->category = 0;
                 $formattab->date = 0;
                 break;
             case fullwithoutauthor:
-                $formattab->standard = 1;
                 $formattab->author = 0;
-                $formattab->category = 1;
-                $formattab->date = 1;
                 break;
             default:
-                $formattab->standard = 1;
-                $formattab->author = 1;
-                $formattab->category = 1;
-                $formattab->date = 1;
                 break;
         }
+
+        //insert records into mdl_glossary_formats_tabs
+        $id = $DB->insert_record('glossary_formats_tabs', $formattab);
+        $visibletabs = $DB->get_record('glossary_formats_tabs', array('id' => $id));
+
+        return $visibletabs;
+    }else{
+        return $visibletabs;
     }
 
 }
