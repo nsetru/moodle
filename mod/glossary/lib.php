@@ -3136,6 +3136,7 @@ function glossary_page_type_list($pagetype, $parentcontext, $currentcontext) {
     return $module_pagetype;
 }
 
+//-- niv MDL-26501
 /**
  * Returns list of tabs
  * @return array
@@ -3196,3 +3197,5 @@ function glossary_get_available_tabs($formatid){
     }
 
 }
+
+//-- niv MDL-26501

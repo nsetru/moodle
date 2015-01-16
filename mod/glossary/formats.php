@@ -44,9 +44,11 @@ if ( $mode == 'visible' and confirm_sesskey()) {
 
     $DB->update_record("glossary_formats",$displayformat);
 
-    //-- niv
+    //-- niv MDL-26501
     //$formattabs = $DB->get_record('glossary_formats_tabs', array('formatid' => $id));
     $updatetab = new stdClass();
+    $updatetab->formatid = $id;
+
     $alltabs = glossary_get_all_tabs();
     foreach($alltabs as $key=>$value){
         if(in_array($key, $form->visibletabs)){
@@ -56,7 +58,7 @@ if ( $mode == 'visible' and confirm_sesskey()) {
         }
     }
     $DB->update_record('glossary_formats_tabs', $updatetab);
-    //-- niv
+    //-- niv MDL-26501
     redirect("$CFG->wwwroot/$CFG->admin/settings.php?section=modsettingglossary#glossary_formats_header");
     die;
 }
@@ -269,7 +271,7 @@ echo '<table width="90%" align="center" class="generalbox">';
             <?php
             $glossarytabs = glossary_get_all_tabs();
             $availabletabs = glossary_get_available_tabs($id);
-            $size = min(10, count($visibletabs));
+            $size = min(10, count($glossarytabs));
             ?>
             <select id="visibletabs" name="visibletabs[]" size="<?php $size ?>" multiple="multiple">
                 <?php

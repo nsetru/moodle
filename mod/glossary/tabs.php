@@ -20,22 +20,40 @@
         $tab = $defaulttab;
     }
 
+    //-- niv MDL-26501
+    global $DB;
+    //get formatid for this glossary
+    $formatid = $DB->get_field('glossary_formats', 'id',array('name' => $glossary->displayformat));
 
-    $browserow[] = new tabobject(GLOSSARY_STANDARD_VIEW,
-                                 $CFG->wwwroot.'/mod/glossary/view.php?id='.$id.'&amp;mode=letter',
-                                 get_string('standardview', 'glossary'));
+    //check tabs for this formatid and get visible tabs for glossary's displayformat
+    if(!$visibletabs = $DB->get_record('glossary_formats_tabs', array('formatid' => $formatid))){
+        $visibletabs = glossary_get_available_tabs($formatid);
+    }
 
-    $browserow[] = new tabobject(GLOSSARY_CATEGORY_VIEW,
-                                 $CFG->wwwroot.'/mod/glossary/view.php?id='.$id.'&amp;mode=cat',
-                                 get_string('categoryview', 'glossary'));
+    if($visibletabs->standard == 1){
+        $browserow[] = new tabobject(GLOSSARY_STANDARD_VIEW,
+            $CFG->wwwroot.'/mod/glossary/view.php?id='.$id.'&amp;mode=letter',
+            get_string('standardview', 'glossary'));
+    }
 
-    $browserow[] = new tabobject(GLOSSARY_DATE_VIEW,
-                                 $CFG->wwwroot.'/mod/glossary/view.php?id='.$id.'&amp;mode=date',
-                                 get_string('dateview', 'glossary'));
+    if($visibletabs->category == 1){
+        $browserow[] = new tabobject(GLOSSARY_CATEGORY_VIEW,
+            $CFG->wwwroot.'/mod/glossary/view.php?id='.$id.'&amp;mode=cat',
+            get_string('categoryview', 'glossary'));
+    }
 
-    $browserow[] = new tabobject(GLOSSARY_AUTHOR_VIEW,
-                                 $CFG->wwwroot.'/mod/glossary/view.php?id='.$id.'&amp;mode=author',
-                                 get_string('authorview', 'glossary'));
+    if($visibletabs->date == 1){
+        $browserow[] = new tabobject(GLOSSARY_DATE_VIEW,
+            $CFG->wwwroot.'/mod/glossary/view.php?id='.$id.'&amp;mode=date',
+            get_string('dateview', 'glossary'));
+    }
+
+    if($visibletabs->author == 1){
+        $browserow[] = new tabobject(GLOSSARY_AUTHOR_VIEW,
+            $CFG->wwwroot.'/mod/glossary/view.php?id='.$id.'&amp;mode=author',
+            get_string('authorview', 'glossary'));
+    }
+    //-- niv MDL-26501
 
     if ($tab < GLOSSARY_STANDARD_VIEW || $tab > GLOSSARY_AUTHOR_VIEW) {   // We are on second row
         $inactive = array('edit');
