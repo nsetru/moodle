@@ -44,8 +44,7 @@ if ( $mode == 'visible' and confirm_sesskey()) {
 
     $DB->update_record("glossary_formats",$displayformat);
 
-    //-- niv MDL-26501
-    //$formattabs = $DB->get_record('glossary_formats_tabs', array('formatid' => $id));
+    // update records within glossary_formats_tabs
     $updatetab = new stdClass();
     $updatetab->formatid = $id;
 
@@ -58,7 +57,7 @@ if ( $mode == 'visible' and confirm_sesskey()) {
         }
     }
     $DB->update_record('glossary_formats_tabs', $updatetab);
-    //-- niv MDL-26501
+
     redirect("$CFG->wwwroot/$CFG->admin/settings.php?section=modsettingglossary#glossary_formats_header");
     die;
 }
@@ -291,7 +290,7 @@ echo '<table width="90%" align="center" class="generalbox">';
             </select>
         </td>
         <td width="60%">
-            <?php print_string("cnfshowgroup", "glossary") ?><br/><br/>
+            <?php print_string("cnftabs", "glossary") ?><br/><br/>
         </td>
     </tr>
 

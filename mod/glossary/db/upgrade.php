@@ -59,7 +59,7 @@ function xmldb_glossary_upgrade($oldversion) {
     // Moodle v2.6.0 release upgrade line.
     // Put any upgrade step following this.
 
-    if($oldversion < 2015010800){
+    if($oldversion < 2013110501){
         // Define table glossary_formats_tabs to be created.
         $table = new xmldb_table('glossary_formats_tabs');
 
@@ -81,7 +81,7 @@ function xmldb_glossary_upgrade($oldversion) {
         }
 
         // Glossary savepoint reached.
-        upgrade_mod_savepoint(true, 2015010800, 'glossary');
+        upgrade_mod_savepoint(true, 2013110501, 'glossary');
     }
 
     return true;
