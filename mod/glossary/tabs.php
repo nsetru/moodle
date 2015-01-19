@@ -1,4 +1,5 @@
 <?php
+
     if (!isset($sortorder)) {
         $sortorder = '';
     }
@@ -20,8 +21,6 @@
         $tab = $defaulttab;
     }
 
-    //-- niv MDL-26501
-    global $DB;
     //get formatid for this glossary
     $formatid = $DB->get_field('glossary_formats', 'id',array('name' => $glossary->displayformat));
 
@@ -53,7 +52,6 @@
             $CFG->wwwroot.'/mod/glossary/view.php?id='.$id.'&amp;mode=author',
             get_string('authorview', 'glossary'));
     }
-    //-- niv MDL-26501
 
     if ($tab < GLOSSARY_STANDARD_VIEW || $tab > GLOSSARY_AUTHOR_VIEW) {   // We are on second row
         $inactive = array('edit');

@@ -3136,9 +3136,8 @@ function glossary_page_type_list($pagetype, $parentcontext, $currentcontext) {
     return $module_pagetype;
 }
 
-//-- niv MDL-26501
 /**
- * Returns list of tabs
+ * Returns array of glossary tabs - standard, author, category, date
  * @return array
  */
 function glossary_get_all_tabs() {
@@ -3146,6 +3145,7 @@ function glossary_get_all_tabs() {
 
     require_once(dirname(__FILE__).'/locallib.php');
 
+    // return list of all glossary tabs
     return array (
         standard   => get_string('standardview', 'glossary'),
         author      => get_string('authorview', 'glossary'),
@@ -3154,15 +3154,20 @@ function glossary_get_all_tabs() {
     );
 }
 
-
+/**
+ * Returns visible tabs for a glossary format.
+ * Inserts records within glossary_formats_tabs table, if there are no entries for glossary format
+ *
+ * @param int $formatid
+ * @return mixed $visibletabs
+ */
 function glossary_get_available_tabs($formatid){
     global $DB;
 
-    // Get list of all tabs
-    // Check list of visible tabs for particular format
-    // If no entries found within mdl_glossary_format_tabs table. Insert some default values for continuous, dictionary, fullwithoutauthor formats
+    // Check list of visible tabs for glossary format
     if(!$visibletabs = $DB->get_record('glossary_formats_tabs', array('formatid' => $formatid))){
 
+        // if no entries found within mdl_glossary_format_tabs table, insert records
         $formattab = new stdClass();
         $formattab->formatid = $formatid;
         $formattab->standard = 1;
@@ -3171,6 +3176,8 @@ function glossary_get_available_tabs($formatid){
         $formattab->date = 1;
 
         $glossaryformat = $DB->get_field('glossary_formats', 'name', array('id' => $formatid));
+
+        // default values for continuous, dictionary, fullwithoutauthor formats
         switch($glossaryformat){
             case continuous:
                 $formattab->author = 0;
@@ -3197,5 +3204,3 @@ function glossary_get_available_tabs($formatid){
     }
 
 }
-
-//-- niv MDL-26501

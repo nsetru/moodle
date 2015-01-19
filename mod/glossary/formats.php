@@ -264,7 +264,7 @@ echo '<table width="90%" align="center" class="generalbox">';
     <?php print_string("cnfshowgroup", "glossary") ?><br /><br />
     </td>
 </tr>
-<!-- niv MDL-26501 -->
+
     <tr valign="top">
         <td align="right" width="20%"><label for="visibletabs">Visible tabs</label></td>
         <td>
@@ -294,7 +294,6 @@ echo '<table width="90%" align="center" class="generalbox">';
             <?php print_string("cnfshowgroup", "glossary") ?><br/><br/>
         </td>
     </tr>
-<!-- niv MDL-26501 -->
 
 <tr>
     <td colspan="3" align="center">
