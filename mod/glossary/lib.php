@@ -3135,3 +3135,72 @@ function glossary_page_type_list($pagetype, $parentcontext, $currentcontext) {
         'mod-glossary-edit'=>get_string('page-mod-glossary-edit', 'glossary'));
     return $module_pagetype;
 }
+
+/**
+ * Returns array of glossary tabs - standard, author, category, date
+ * @return array
+ */
+function glossary_get_all_tabs() {
+    global $CFG; // required for the include
+
+    require_once(dirname(__FILE__).'/locallib.php');
+
+    // return list of all glossary tabs
+    return array (
+        standard   => get_string('standardview', 'glossary'),
+        author      => get_string('authorview', 'glossary'),
+        category    => get_string('categoryview', 'glossary'),
+        date   => get_string('dateview', 'glossary')
+    );
+}
+
+/**
+ * Returns visible tabs for a glossary format.
+ * Inserts records within glossary_formats_tabs table, if there are no entries for glossary format
+ *
+ * @param int $formatid
+ * @return mixed $visibletabs
+ */
+function glossary_get_available_tabs($formatid){
+    global $DB;
+
+    // Check list of visible tabs for glossary format
+    if(!$visibletabs = $DB->get_record('glossary_formats_tabs', array('formatid' => $formatid))){
+
+        // if no entries found within mdl_glossary_format_tabs table, insert records
+        $formattab = new stdClass();
+        $formattab->formatid = $formatid;
+        $formattab->standard = 1;
+        $formattab->author = 1;
+        $formattab->category = 1;
+        $formattab->date = 1;
+
+        $glossaryformat = $DB->get_field('glossary_formats', 'name', array('id' => $formatid));
+
+        // default values for continuous, dictionary, fullwithoutauthor formats
+        switch($glossaryformat){
+            case continuous:
+                $formattab->author = 0;
+                break;
+            case dictionary:
+                $formattab->author = 0;
+                $formattab->category = 0;
+                $formattab->date = 0;
+                break;
+            case fullwithoutauthor:
+                $formattab->author = 0;
+                break;
+            default:
+                break;
+        }
+
+        //insert records into mdl_glossary_formats_tabs
+        $id = $DB->insert_record('glossary_formats_tabs', $formattab);
+        $visibletabs = $DB->get_record('glossary_formats_tabs', array('id' => $id));
+
+        return $visibletabs;
+    }else{
+        return $visibletabs;
+    }
+
+}

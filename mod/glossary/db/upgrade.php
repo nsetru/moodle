@@ -59,6 +59,31 @@ function xmldb_glossary_upgrade($oldversion) {
     // Moodle v2.6.0 release upgrade line.
     // Put any upgrade step following this.
 
+    if($oldversion < 2013110501){
+        // Define table glossary_formats_tabs to be created.
+        $table = new xmldb_table('glossary_formats_tabs');
+
+        // Adding fields to table glossary_formats_tabs.
+        $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+        $table->add_field('formatid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('standard', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '1');
+        $table->add_field('author', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '1');
+        $table->add_field('category', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '1');
+        $table->add_field('date', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '1');
+
+        // Adding keys to table glossary_formats_tabs.
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
+        $table->add_key('formatid', XMLDB_KEY_FOREIGN, array('formatid'), 'glossary_formats', array('id'));
+
+        // Conditionally launch create table for glossary_formats_tabs.
+        if (!$dbman->table_exists($table)) {
+            $dbman->create_table($table);
+        }
+
+        // Glossary savepoint reached.
+        upgrade_mod_savepoint(true, 2013110501, 'glossary');
+    }
+
     return true;
 }
 

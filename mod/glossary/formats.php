@@ -43,6 +43,21 @@ if ( $mode == 'visible' and confirm_sesskey()) {
     $displayformat->sortorder   = $form->sortorder;
 
     $DB->update_record("glossary_formats",$displayformat);
+
+    // update records within glossary_formats_tabs
+    $updatetab = $DB->get_record('glossary_formats_tabs', array('formatid' => $id));
+
+    $alltabs = glossary_get_all_tabs();
+    // loop through all tabs and check if tabs are visible in form data
+    foreach($alltabs as $key=>$value){
+        if(in_array($key, $form->visibletabs)){
+            $updatetab->$key = 1;
+        }else{
+            $updatetab->$key = 0;
+        }
+    }
+    $DB->update_record('glossary_formats_tabs', $updatetab);
+
     redirect("$CFG->wwwroot/$CFG->admin/settings.php?section=modsettingglossary#glossary_formats_header");
     die;
 }
@@ -248,6 +263,35 @@ echo '<table width="90%" align="center" class="generalbox">';
     <?php print_string("cnfshowgroup", "glossary") ?><br /><br />
     </td>
 </tr>
+    <tr valign="top">
+        <td align="right" width="20%"><label for="visibletabs">Visible tabs</label></td>
+        <td>
+            <?php
+            $glossarytabs = glossary_get_all_tabs();
+            $availabletabs = glossary_get_available_tabs($id);
+            $size = min(10, count($glossarytabs));
+            ?>
+            <select id="visibletabs" name="visibletabs[]" size="<?php $size ?>" multiple="multiple">
+                <?php
+                $selected = "";
+                foreach ($glossarytabs as $key => $value) {
+                    if ($availabletabs->$key == 1) {
+                        ?>
+                        <option value="<?php echo $key ?>" selected="selected"><?php echo $value ?></option>
+                    <?php
+                    } else {
+                        ?>
+                        <option value="<?php echo $key ?>"><?php echo $value ?></option>
+                    <?php
+                    }
+                }
+                ?>
+            </select>
+        </td>
+        <td width="60%">
+            <?php print_string("cnftabs", "glossary") ?><br/><br/>
+        </td>
+    </tr>
 <tr>
     <td colspan="3" align="center">
     <input type="submit" value="<?php print_string("savechanges") ?>" /></td>
