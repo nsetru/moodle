@@ -7,6 +7,7 @@ global $DB, $PAGE, $OUTPUT;
 $context = context_system::instance();
 require_login();
 
+$PAGE->set_pagelayout('admin');
 $PAGE->set_context($context);
 //$PAGE->set_url($CFG->wwwroot . '/local/testf2fapi/f2fapi_test.php');
 echo $OUTPUT->header();
@@ -42,6 +43,6 @@ $archive_file_name = $CFG->dataroot . '/turnitin1_submission/archive1.zip';
 $file_path= $CFG->dataroot . '/nivtemp/';
 
 //cal the function
-zip_filesanddownload($file_names,$archive_file_name,$file_path);
+//zip_filesanddownload($file_names,$archive_file_name,$file_path);
 
 echo $OUTPUT->footeer();
