@@ -23,6 +23,7 @@ if(isset($_POST['turnitinassignments'])){
     $turnitinassignments  = $_POST['turnitinassignments'];
     foreach($turnitinassignments as $turnitinassignment){
         //create a turnitin directory and copy files from filedir to turnitin directory location
+        turnitin_submissions_process($turnitinassignment);
     }
 }
 //
@@ -68,10 +69,6 @@ if($_POST['courseshortname'] and $course) {
         <?php
     }
     ?>
-
-        <!--<lable>Enter Course Shortname : </lable>
-        <input type="text" name="courseshortname1">
-        <input type="hidden" name="action" value="coursesubmit1">-->
         <br />
         <br />
         <input type="submit" value="Submit">
