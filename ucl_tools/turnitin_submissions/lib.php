@@ -6,7 +6,7 @@
  * Time: 16:01
  */
 
-function turnitin_submissions_process($turnitinid){
+function turnitin_submissions_process($turnitinid) {
     global $DB;
 
     $turnitin_submissions = $DB->get_records('turnitintool_submissions', array('turnitintoolid' => $turnitinid));
@@ -20,12 +20,12 @@ function turnitin_submissions_process($turnitinid){
 
 }
 
-function turnitin_submissions_get_storefiles($turnitintoolid)
-{
+function turnitin_submissions_get_storefiles($turnitintoolid) {
     global $DB, $CFG;
 
     echo 'turnitin_submissions_get_storefiles';
     $params = array('turnitintoolid' => $turnitintoolid);
+
     $sql = "SELECT
     fl.id AS id,
     cm.id AS cmid,
