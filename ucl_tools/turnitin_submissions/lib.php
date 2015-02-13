@@ -112,9 +112,10 @@ ORDER BY sb.submission_filename DESC ";
 
 function turnitin_submissions_printtable($turnitinid) {
 
+
     $turnitin_results = turnitin_submissions_get_storefiles($turnitinid);
 
-    $table = "<table border=\"1\" style=\"width:100%\"><tr>
+    $th = "<table border=\"1\" style=\"width:100%\"><tr>
                 <th>Course Id</th>
                 <th>Course Fullname</th>
                 <th>Course Shortname</th>
@@ -125,6 +126,7 @@ function turnitin_submissions_printtable($turnitinid) {
                 <th>Filename</th>
                 </tr>";
     foreach($turnitin_results as $turnitin){
+        $table = $th;
         $table .= "<tr>
                 <td>$turnitin->course</td>
                 <td>$turnitin->coursetitle</td>
