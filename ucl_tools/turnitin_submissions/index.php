@@ -32,13 +32,22 @@ if (isset($_POST['courseshortname'])) {
 }
 
 if (isset($_POST['turnitinassignments'])) {
+    echo 'POST courseid'.$_POST['courseid'].'<br />';
+
     $turnitinassignments = $_POST['turnitinassignments'];
     foreach ($turnitinassignments as $turnitinassignment) {
 
         //create a turnitin directory and copy files from filedir to turnitin directory location
         turnitin_submissions_process($turnitinassignment);
         $table = turnitin_submissions_printtable($turnitinassignment);
+        echo $table;
     }
+}
+
+if(isset($_POST['courseid'])) {
+    $courseid = $_POST['courseid'];
+    // archive all files under $CFG->dataroot/turnitinfiles_backup/
+    turnitin_submissions_archive($courseid);
 }
 ?>
 
@@ -74,6 +83,7 @@ if (isset($_POST['courseshortname']) and $course) {
         ?>
         <br/>
         <br/>
+        <input type="hidden" name="courseid" value="<?php echo $course->id?>" >
         <input type="submit" value="Submit">
     </form>
 <?php
@@ -89,7 +99,12 @@ if (isset($_POST['turnitinassignments'])) {
         <?php
         }
     }*/
-    echo $table;
+    ?>
+    <br />
+    <form action="index.php" method="post">
+        <input type="submit" value="Download Files">
+    </form>
+<?php
 }
 ?>
 </body>
