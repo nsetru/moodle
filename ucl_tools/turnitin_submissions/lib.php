@@ -1,12 +1,18 @@
 <?php
+
 /**
- * Created by PhpStorm.
+ * Script to process turnitin submissions
+ *  1) Copy turnitin submisisons from $CFG->dataroot/filedir/ to $CFG->dataroot/turnitinfilesbackup given a courseid
+ *  2) Archive all copied turnitin submissions from $CFG->dataroot/turnitinfilesbackup/<course_shortname>
+ *
  * User: cceanse
  * Date: 02/02/2015
  * Time: 16:01
  */
 
 /**
+ * Process turnitin submissions
+ *
  * @param $turnitinid
  */
 function turnitin_submissions_process($turnitinid)
@@ -16,8 +22,7 @@ function turnitin_submissions_process($turnitinid)
     $turnitin_archivepath = $CFG->dataroot . '/turnitinfilesbackup/';
 
     $turnitin_submissions = $DB->get_records('turnitintool_submissions', array('turnitintoolid' => $turnitinid));
-    /*print_r(count($turnitin_submissions));
-    echo '<br />';*/
+    /*print_r(count($turnitin_submissions));*/
 
     // get all stored files related to turnitin
     $turnitindata = turnitin_submissions_get_storefiles($turnitinid);
@@ -25,12 +30,6 @@ function turnitin_submissions_process($turnitinid)
     if (!empty($turnitindata)) {
         $turnitindir_exists = 0;
         foreach ($turnitindata as $turnitin) {
-            /*echo '<br />';
-            print_r($turnitin);
-            echo '<br />';
-            echo 'course fullname:' . $turnitin->coursetitle . '<br />';
-            echo 'filename:' . $turnitin->filename . '<br />';
-            echo 'activity:' . $turnitin->activity . '<br />';*/
 
             // check if directory with course shortname already exists. If not make directory with course shortname
             $coursedir = $turnitin_archivepath . $turnitin->courseshort;
@@ -53,7 +52,7 @@ function turnitin_submissions_process($turnitinid)
                 // navigate to folder with hashed files
                 $storedfilelocation = $CFG->dataroot . '/filedir/' . $l1 . '/' . $l2 . '/' . $filecontenthash;
 
-                // turnitin dest filename
+                // turnitin destination filename
                 $turnitin_filename = $turnitindir . '/' . $turnitin->rawfilename;
                 // check if hashed file exists under /filedir/
                 if (file_exists($storedfilelocation)) {
@@ -72,6 +71,8 @@ function turnitin_submissions_process($turnitinid)
 }
 
 /**
+ * Get stored turnitin submissions
+ *
  * @param $turnitintoolid
  * @return array
  */
@@ -123,6 +124,8 @@ ORDER BY sb.submission_filename DESC ";
 }
 
 /**
+ * Print table with turnitin submission records
+ *
  * @param $turnitinid
  * @return string
  */
@@ -169,6 +172,8 @@ function turnitin_submissions_printtable($turnitinid)
 }
 
 /**
+ * Archive all turnitin submissions related to course
+ *
  * @param $courseid
  */
 function turnitin_submissions_archive($courseid){
@@ -179,13 +184,9 @@ function turnitin_submissions_archive($courseid){
     // get course shortname
     $course = $DB->get_record('course', array('id' => $courseid));
 
-    print_r($course);
     $source_dir = $turnitin_archivepath . $course->shortname .'/';
-    echo 'source_file:'.$source_dir.'<br/>';
     $zip_file = $turnitin_archivepath . $course->shortname .'.zip';
-    echo 'zip_file:'.$zip_file.'<br/>';
     $file_list = create_zip::listDirectory($source_dir);
-    print_r($file_list);
 
     $zip = new ZipArchive();
     if ($zip->open($zip_file, ZIPARCHIVE::CREATE) === true) {
@@ -200,7 +201,7 @@ function turnitin_submissions_archive($courseid){
 
 
 /**
- *
+ * Create Archive of all Turnitin submissions for a course
 **/
 class create_zip
 {
@@ -213,7 +214,6 @@ class create_zip
                 continue;
             }
             if(is_file("$dir$value")) {
-                echo "$dir$value<br/>";
                 $result[] = "$dir$value";
                 continue;
             }

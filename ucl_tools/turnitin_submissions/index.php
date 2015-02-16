@@ -10,7 +10,6 @@ require_once('../../config.php');
 require_once($CFG->dirroot . '/ucl_tools/turnitin_submissions/lib.php');
 
 require_login();
-print_r($_POST);
 ?>
 
 <html>
@@ -32,8 +31,6 @@ if (isset($_POST['courseshortname'])) {
 }
 
 if (isset($_POST['turnitinassignments'])) {
-    echo 'POST courseid'.$_POST['courseid'].'<br />';
-
     $turnitinassignments = $_POST['turnitinassignments'];
     foreach ($turnitinassignments as $turnitinassignment) {
 
@@ -49,6 +46,12 @@ if(isset($_POST['courseid'])) {
     // archive all files under $CFG->dataroot/turnitinfiles_backup/
     turnitin_submissions_archive($courseid);
 }
+
+// TODO: Implement download archive functionality
+/*if(isset($_POST['download'])) {
+    echo 'courseid:'.$_POST['courseid'];
+    echo 'download:'.$_POST['download'];
+}*/
 ?>
 
 
@@ -74,7 +77,6 @@ if (isset($_POST['courseshortname']) and $course) {
     <form action="index.php" method="post">
         <?php
         foreach ($turnitin_modules as $turnitin) {
-            //$turnitin_submissions = $DB->get_records('turnitintool_submissions', array('turnitintoolid' => $turnitin->id));
             echo $turnitin->name;
             ?>
             <input type="checkbox" name="turnitinassignments[]" value=<?php echo $turnitin->id ?>/>  <br/>
@@ -89,20 +91,12 @@ if (isset($_POST['courseshortname']) and $course) {
 <?php
 }
 if (isset($_POST['turnitinassignments'])) {
-    /*$turnitinassignments = $_POST['turnitinassignments'];
-    foreach ($turnitinassignments as $turnitinassignment) {
-        // get all stored files from filedir
-        $turnitin_results = turnitin_submissions_get_storefiles($turnitinassignment);
-        if(!empty($turnitin_results)) {
-            ?>
-
-        <?php
-        }
-    }*/
     ?>
-    <br />
+    <!-- TODO: Implement download archive functionality -->
+    <!--<br />
     <form action="index.php" method="post">
-        <input type="submit" value="Download Files">
+        <input type="hidden" name="courseid" value="<?php //echo $course->id?>" >
+        <input type="submit" name="download" value="Download Files">-->
     </form>
 <?php
 }
